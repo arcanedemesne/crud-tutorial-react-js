@@ -1,43 +1,39 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import React, { PureComponent } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  Container,
+  Col,
+  Row,
+} from "shards-react";
+
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "shards-ui/dist/css/shards.min.css";
 
-import AddItem from "./components/AddItem";
-import Item from "./components/EditItem";
-import ItemList from "./components/ItemList";
+import { AddItem } from "./containers/AddItem";
+import { EditItem } from "./containers/EditItem";
+import { ListItems } from "./containers/ListItems";
+import { Navigation } from "./containers/Navigation";
 
-class App extends Component {
+class App extends PureComponent {
   render() {
     return (
       <Router>
-        <div>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
-            <a href="/items" className="navbar-brand">
-              Item Checklist App
-            </a>
-            <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/items"} className="nav-link">
-                  Items
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to={"/add"} className="nav-link">
-                  Add
-                </Link>
-              </li>
-            </div>
-          </nav>
-
-          <div className="container mt-3">
-            <Switch>
-              <Route exact path={["/", "/items"]} component={ItemList} />
-              <Route exact path="/add" component={AddItem} />
-              <Route path="/items/:id" component={Item} />
-            </Switch>
-          </div>
-        </div>
+        <Container>
+          <Row style={{ marginBottom: 13 }}>
+            <Col>
+              <Navigation />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Switch>
+                <Route exact path={["/", "/items"]} component={ListItems} />
+                <Route exact path="/add" component={AddItem} />
+                <Route path="/items/:id" component={EditItem} />
+              </Switch>
+            </Col>
+          </Row>
+        </Container>
       </Router>
     );
   }

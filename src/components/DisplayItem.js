@@ -1,39 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment } from "react";
+import {
+  Badge,
+  Card,
+  CardTitle,
+  CardBody,
+  Button,
+} from "shards-react";
 
 export const DisplayItem = ({ currentItem }) => (
-  <div className="col-md-6">
+  <Fragment>
     {currentItem.id ? (
-      <div>
-        <h4>Item</h4>
-        <div>
-          <label>
-            <strong>Title:</strong>
-          </label>{' '}
-          {currentItem.title}
-        </div>
-        <div>
-          <label>
-            <strong>Description:</strong>
-          </label>{' '}
-          {currentItem.description}
-        </div>
-        <div>
-          <label>
-            <strong>Status:</strong>
-          </label>{' '}
-          {currentItem.isChecked ? "Checked" : "Not Checked"}
-        </div>
-
-        <Link to={"/items/" + currentItem.id} className="badge badge-warning">
-          Edit
-        </Link>
-      </div>
+      <Card style={{ maxWidth: "300px" }}>
+        <CardBody>
+          <CardTitle>{currentItem.title}</CardTitle>
+          <p>{currentItem.description}</p>
+          <p>
+            <Badge outline disabled theme="light">
+              {currentItem.isChecked ? "checked" : "unchecked"}
+            </Badge>
+          </p>
+          <Button href={"/items/" + currentItem.id} theme="warning">
+            Edit
+          </Button>
+        </CardBody>
+      </Card>
     ) : (
-      <div>
-        <br />
+      <Fragment>
         <p>Please click on a Item...</p>
-      </div>
+      </Fragment>
     )}
-  </div>
+  </Fragment>
 );

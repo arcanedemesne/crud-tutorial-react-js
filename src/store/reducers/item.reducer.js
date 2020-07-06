@@ -4,6 +4,7 @@ import { Item } from "../../objects";
 const initialState = {
   currentItem: new Item(),
   items: [],
+  errorMessage: null,
 };
 
 export function itemReducer(state = initialState, action) {

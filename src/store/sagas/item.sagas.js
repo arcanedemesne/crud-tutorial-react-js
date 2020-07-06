@@ -1,5 +1,7 @@
 import { all, call, put, takeLatest } from "redux-saga/effects"; //takeEvery
 import { ItemActionTypes } from "../actionTypes/item.actionTypes";
+import { AlertStatusActionTypes } from "../actionTypes/alertStatus.actionTypes";
+import { AlertStatus } from "../../objects/";
 import Api from "../../services/item.service";
 
 // worker Saga: will be fired on GET_ALL_ITEMS.REQUESTED actions
@@ -10,7 +12,7 @@ function* getAllItems() {
   } catch (e) {
     yield put({
       type: ItemActionTypes.GET_ALL_ITEMS.FAILED,
-      message: e.message,
+      errorMessage: e.message,
     });
   }
 }
@@ -21,7 +23,7 @@ function* getItem(action) {
     const response = yield call(Api.get, action.itemId);
     yield put({ type: ItemActionTypes.GET_ITEM.SUCCEEDED, item: response.data });
   } catch (e) {
-    yield put({ type: ItemActionTypes.GET_ITEM.FAILED, message: e.message });
+    yield put({ type: ItemActionTypes.GET_ITEM.FAILED, errorMessage: e.message });
   }
 }
 
@@ -30,8 +32,10 @@ function* createItem(action) {
   try {
     const response = yield call(Api.create, action.item);
     yield put({ type: ItemActionTypes.CREATE_ITEM.SUCCEEDED, item: response.data });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.SUCCEEDED, alertStatus: AlertStatus.AlertStatuses.CREATE_ITEM.SUCCESS });
   } catch (e) {
-    yield put({ type: ItemActionTypes.CREATE_ITEM.FAILED, message: e.message });
+    yield put({ type: ItemActionTypes.CREATE_ITEM.FAILED, errorMessage: e.message });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.FAILED, alertStatus: AlertStatus.AlertStatuses.CREATE_ITEM.FAILURE });
   }
 }
 
@@ -40,8 +44,10 @@ function* updateItem(action) {
   try {
     yield call(Api.update, action.item.id, action.item);
     yield put({ type: ItemActionTypes.UPDATE_ITEM.SUCCEEDED, item: action.item });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.SUCCEEDED, alertStatus: AlertStatus.AlertStatuses.UPDATE_ITEM.SUCCESS });
   } catch (e) {
-    yield put({ type: ItemActionTypes.UPDATE_ITEM.FAILED, message: e.message });
+    yield put({ type: ItemActionTypes.UPDATE_ITEM.FAILED, errorMessage: e.message });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.FAILED, alertStatus: AlertStatus.AlertStatuses.UPDATE_ITEM.FAILURE });
   }
 }
 
@@ -53,8 +59,10 @@ function* deleteItem(action) {
       type: ItemActionTypes.DELETE_ITEM.SUCCEEDED,
       itemId: action.itemId,
     });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.SUCCEEDED, alertStatus: AlertStatus.AlertStatuses.DELETE_ITEM.SUCCESS });
   } catch (e) {
-    yield put({ type: ItemActionTypes.DELETE_ITEM.FAILED, message: e.message });
+    yield put({ type: ItemActionTypes.DELETE_ITEM.FAILED, errorMessage: e.message });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.FAILED, alertStatus: AlertStatus.AlertStatuses.DELETE_ITEM.FAILURE });
   }
 }
 
@@ -63,11 +71,13 @@ function* deleteAllItems() {
   try {
     yield call(Api.deleteAll);
     yield put({ type: ItemActionTypes.DELETE_ALL_ITEMS.SUCCEEDED });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.SUCCEEDED, alertStatus: AlertStatus.AlertStatuses.DELETE_ALL_ITEMS.SUCCESS });
   } catch (e) {
     yield put({
       type: ItemActionTypes.DELETE_ALL_ITEMS.FAILED,
-      message: e.message,
+      errorMessage: e.message,
     });
+    yield put({ type: AlertStatusActionTypes.SET_ALERT_STATUS.FAILED, alertStatus: AlertStatus.AlertStatuses.DELETE_ALL_ITEMS.FAILURE });
   }
 }
 
@@ -79,7 +89,7 @@ function* findItemByTitle(action) {
   } catch (e) {
     yield put({
       type: ItemActionTypes.FIND_BY_TITLE.FAILED,
-      message: e.message,
+      errorMessage: e.message,
     });
   }
 }

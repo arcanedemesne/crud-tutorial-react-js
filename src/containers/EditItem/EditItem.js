@@ -6,8 +6,8 @@ import {
   setItem,
   deleteItem,
   updateItem,
-} from "../store/actions/item.actions";
-import { ItemForm } from "./ItemForm";
+} from "../../store/actions/item.actions";
+import ItemForm from "../../components/ItemForm";
 
 class EditItem extends PureComponent {
   constructor(props) {
@@ -17,6 +17,7 @@ class EditItem extends PureComponent {
     this.onCheckChanged = this.onCheckChanged.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
     this.onSubmitItem = this.onSubmitItem.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
 
   componentDidMount() {
@@ -39,8 +40,9 @@ class EditItem extends PureComponent {
     this.updateItem("description", e.target.value);
   }
 
-  onCheckChanged(isChecked) {
-    this.updateItem("isChecked", isChecked);
+  onCheckChanged() {
+    const { currentItem } = this.props;
+    this.updateItem("isChecked", !currentItem.isChecked);
   }
 
   onDeleteItem() {
@@ -55,6 +57,11 @@ class EditItem extends PureComponent {
     history.push("/");
   }
 
+  onCancel() {
+    const { history } = this.props;
+    history.push("/");
+  }
+
   render() {
     const { currentItem } = this.props;
     return (
@@ -66,6 +73,7 @@ class EditItem extends PureComponent {
         onCheckChanged={this.onCheckChanged}
         onDeleteItem={this.onDeleteItem}
         onSumbitItem={this.onSubmitItem}
+        onCancel={this.onCancel}
       />
     );
   }

@@ -1,17 +1,19 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { getItem, setItem, createItem } from "../store/actions/item.actions";
-import { Item } from "../objects";
-import { ItemForm } from "./ItemForm";
 
-class AddItem extends Component {
+import { getItem, setItem, createItem } from "../../store/actions/item.actions";
+import { Item } from "../../objects";
+import ItemForm from "../../components/ItemForm";
+
+class AddItem extends PureComponent {
   constructor(props) {
     super(props);
     this.updateItem = this.updateItem.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onSubmitItem = this.onSubmitItem.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +42,11 @@ class AddItem extends Component {
     history.push("/");
   }
 
+  onCancel() {
+    const { history } = this.props;
+    history.push("/");
+  }
+
   render() {
     const { currentItem } = this.props;
     return (
@@ -49,6 +56,7 @@ class AddItem extends Component {
         onChangeTitle={this.onChangeTitle}
         onChangeDescription={this.onChangeDescription}
         onSumbitItem={this.onSubmitItem}
+        onCancel={this.onCancel}
       />
     );
   }
@@ -69,7 +77,7 @@ const mapDispatchToProps = (dispatch /*, ownProps*/) => {
         setItem,
         createItem,
       },
-      dispatch,
+      dispatch
     ),
   };
 };

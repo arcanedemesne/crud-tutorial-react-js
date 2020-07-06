@@ -6,8 +6,13 @@ import {
    getAllItems, 
    setItem } from "../store/actions/item.actions";
 import { Item } from "../objects";
-import { TextBox } from "./inputs";
-import { SearchButton } from "./buttons";
+
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  InputGroup, InputGroupAddon, InputGroupText, FormInput,
+} from "shards-react";
 
 class SearchItem extends PureComponent {
   constructor(props) {
@@ -40,16 +45,21 @@ class SearchItem extends PureComponent {
   render() {
     const { searchTitle } = this.state;
     return (
-      <div className="col-md-8">
-        <div className="input-group mb-3">
-          <TextBox
-            placeholder="Search by Title"
-            value={searchTitle}
-            onChange={this.onChangeSearchTitle}
-          />
-          <SearchButton onClick={this.onSearchTitle} />
-        </div>
-      </div>
+      <InputGroup size="sm" seamless>
+        <FormInput
+          className="border-0"
+          placeholder="Search by Title"
+          value={searchTitle}
+          onChange={this.onChangeSearchTitle}
+        />
+        <InputGroupAddon type="append"
+          onClick={this.onSearchTitle}
+        >
+          <InputGroupText>
+            <FontAwesomeIcon style={{cursor: "pointer"}} icon={faSearch} />
+          </InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
     );
   }
 }
